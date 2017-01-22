@@ -5,9 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
-import android.widget.Toast;
-
 /**
  * Created by Randolph on 1/22/2017.
  */
@@ -18,7 +15,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String SID = "SID";
     public static final String FNAME = "FNAME";
     public static final String LNAME = "LNAME";
-    public static final String EMAIL = "EMAIL";
+    public static final String EMAIL = "EMAILADD";
     public static final String PASS = "PASSWORD";
 
     public DatabaseHelper(Context context) {
@@ -31,8 +28,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "SID VARCHAR," +
                 "FNAME VARCHAR," +
                 "LNAME VARCHAR," +
-                "EMAIL VARCHAR," +
-                "PASSWORD VARCHAR)");
+                "EMAILADD VARCHAR," +
+                "PASSWORD VARCHAR);");
     }
 
     @Override
@@ -44,8 +41,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean insertData(Student student) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+        contentValues.put(SID, student.getStudentID());
         contentValues.putAll(student_info(student));
-        long result = db.insert(STUDENT_TBL,null ,contentValues);
+        long result = db.insert(STUDENT_TBL, null, contentValues);
         if(result == -1)
             return false;
         else
@@ -62,7 +60,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(FNAME,student.getFirstName());
         contentValues.put(LNAME,student.getLastName());
-        contentValues.put(EMAIL,student.getAddress());
+        contentValues.put(EMAIL,student.getEmail());
         contentValues.put(PASS, student.getPassword());
         return contentValues;
     }
@@ -72,7 +70,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String sid = student.getStudentID();
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put(SID, student.getStudentID());
         contentValues.putAll(student_info(student));
         db.update(STUDENT_TBL, contentValues, "SID = ?",new String[] { sid });
         return true;

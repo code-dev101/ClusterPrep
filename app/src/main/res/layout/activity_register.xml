@@ -93,8 +93,7 @@ android:fitsSystemWindows="true">
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:padding="12dp"
-        android:text="view Account"
-        android:onClick="view_account"/>
+        android:text="view Account"/>
 
 </LinearLayout>
 </ScrollView>

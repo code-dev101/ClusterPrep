@@ -31,6 +31,10 @@ public class Register extends AppCompatActivity {
         email = (EditText) findViewById(R.id.input_email);
         password = (EditText) findViewById(R.id.input_password);
 
+        btn_onClickListener();
+    }
+
+    private void btn_onClickListener() {
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,74 +53,29 @@ public class Register extends AppCompatActivity {
             }
         });
 
-    }
-//    public void DeleteData() {
-//        btnDelete.setOnClickListener(
-//                new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        Integer deletedRows = myDb.deleteData(editTextId.getText().toString());
-//                        if(deletedRows > 0)
-//                            Toast.makeText(MainActivity.this,"Data Deleted",Toast.LENGTH_LONG).show();
-//                        else
-//                            Toast.makeText(MainActivity.this,"Data not Deleted",Toast.LENGTH_LONG).show();
-//                    }
-//                }
-//        );
-//    }
-//    public void UpdateData() {
-//        btnviewUpdate.setOnClickListener(
-//                new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        boolean isUpdate = myDb.updateData(editTextId.getText().toString(),
-//                                editName.getText().toString(),
-//                                editSurname.getText().toString(),editMarks.getText().toString());
-//                        if(isUpdate == true)
-//                            Toast.makeText(MainActivity.this,"Data Update",Toast.LENGTH_LONG).show();
-//                        else
-//                            Toast.makeText(MainActivity.this,"Data not Updated",Toast.LENGTH_LONG).show();
-//                    }
-//                }
-//        );
-//    }
+        btnView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Cursor res = myDb.getAllData();
+                if(res.getCount() == 0) {
+                    // show message
+                    showMessage("Error","Nothing found");
+                    return;
+                }
 
-    public void create_account(View v) {
-        Student student = new Student();
-        student.setFirstName(fname.getText().toString());
-        student.setLastName(lname.getText().toString());
-        student.setEmail(email.getText().toString());
-        student.setPassword(password.getText().toString());
-        student.setStudentID(sid.getText().toString());
+                StringBuffer buffer = new StringBuffer();
+                while (res.moveToNext()) {
+                    buffer.append("SID :"+ res.getString(0)+"\n");
+                    buffer.append("FNAME :"+ res.getString(1)+"\n");
+                    buffer.append("LNAME :"+ res.getString(2)+"\n");
+                    buffer.append("EMAILADD :"+ res.getString(3)+"\n");
+                    buffer.append("PASSWORD :"+ res.getString(4)+"\n\n");
+                }
 
-        Toast.makeText(Register.this,student.getFirstName(),Toast.LENGTH_LONG).show();
-
-//        boolean isInserted = myDb.insertData(student);
-//        if(isInserted == true)
-//            Toast.makeText(Register.this,"Data Inserted",Toast.LENGTH_LONG).show();
-//        else
-//            Toast.makeText(Register.this,"Data not Inserted",Toast.LENGTH_LONG).show();
-    }
-
-    public void view_account(View v) {
-        Cursor res = myDb.getAllData();
-        if(res.getCount() == 0) {
-            // show message
-            showMessage("Error","Nothing found");
-            return;
-        }
-
-        StringBuffer buffer = new StringBuffer();
-        while (res.moveToNext()) {
-            buffer.append("SID :"+ res.getString(0)+"\n");
-            buffer.append("FNAME :"+ res.getString(1)+"\n");
-            buffer.append("LNAME :"+ res.getString(2)+"\n");
-            buffer.append("EMAIL :"+ res.getString(3)+"\n");
-            buffer.append("PASSWORD :"+ res.getString(3)+"\n\n");
-        }
-
-        // Show all data
-        showMessage("Data",buffer.toString());
+                // Show all data
+                showMessage("Data",buffer.toString());
+            }
+        });
     }
 
     public void showMessage(String title,String Message){
